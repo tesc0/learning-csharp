@@ -136,7 +136,6 @@ namespace hazi1
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(133, 169);
 			this.label4.TabIndex = 7;
-			this.label4.Text = "label4";
 			// 
 			// MainForm
 			// 
