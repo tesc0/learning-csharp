@@ -24,6 +24,8 @@ namespace hazi1
 		private System.Windows.Forms.TextBox textBox1;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
+		private System.ComponentModel.BackgroundWorker backgroundWorker_buborek;
+		private System.ComponentModel.BackgroundWorker backgroundWorker_rendezes;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -57,6 +59,8 @@ namespace hazi1
 			this.label3 = new System.Windows.Forms.Label();
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
+			this.backgroundWorker_buborek = new System.ComponentModel.BackgroundWorker();
+			this.backgroundWorker_rendezes = new System.ComponentModel.BackgroundWorker();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -136,6 +140,14 @@ namespace hazi1
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(133, 169);
 			this.label4.TabIndex = 7;
+			// 
+			// backgroundWorker_buborek
+			// 
+			this.backgroundWorker_buborek.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BackgroundWorker_buborekDoWork);
+			// 
+			// backgroundWorker_rendezes
+			// 
+			this.backgroundWorker_rendezes.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BackgroundWorker_rendezesDoWork);
 			// 
 			// MainForm
 			// 

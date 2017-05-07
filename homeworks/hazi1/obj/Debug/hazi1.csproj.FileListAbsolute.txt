@@ -6,3 +6,11 @@ E:\__c_sharp\projects\hazi1\bin\Debug\hazi1.exe
 E:\__c_sharp\projects\hazi1\bin\Debug\hazi1.pdb
 E:\__c_sharp\projects\hazi1\obj\Debug\hazi1.exe
 E:\__c_sharp\projects\hazi1\obj\Debug\hazi1.pdb
+E:\__github\learning-csharp\homeworks\hazi1\obj\Debug\hazi1.csprojResolveAssemblyReference.cache
+E:\__github\learning-csharp\homeworks\hazi1\obj\Debug\hazi1.MainForm.resources
+E:\__github\learning-csharp\homeworks\hazi1\obj\Debug\hazi1.csproj.GenerateResource.Cache
+E:\__github\learning-csharp\homeworks\hazi1\obj\Debug\hazi1.exe
+E:\__github\learning-csharp\homeworks\hazi1\bin\Debug\hazi1.exe.config
+E:\__github\learning-csharp\homeworks\hazi1\bin\Debug\hazi1.exe
+E:\__github\learning-csharp\homeworks\hazi1\bin\Debug\hazi1.pdb
+E:\__github\learning-csharp\homeworks\hazi1\obj\Debug\hazi1.pdb

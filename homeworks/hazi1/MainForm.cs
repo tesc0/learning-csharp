@@ -12,6 +12,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Diagnostics;
+using System.ComponentModel;
 
 namespace hazi1
 {
@@ -57,19 +59,38 @@ namespace hazi1
 			//beépített rendezés
 			//egyeztetéshez
 			namesTemp = names;
+			
+			//futási idő mérése
+			Stopwatch stopwatch = Stopwatch.StartNew(); //creates and start the instance of Stopwatch
+			/*
+			//rendezés
 			Array.Sort(namesTemp);
+			*/
+			namesTemp = BackgroundWorker_rendezesDoWork();
+			//időmérés megállítása
+			stopwatch.Stop();
+		
 			sortedNames2 = namesTemp;
 			
+			//futási idő mérése
+			Stopwatch stopwatch_bubble = Stopwatch.StartNew();
 			//rendezés
+			/*
 			sortedNames1 = sortNames(names);			
 			while(!Enumerable.SequenceEqual(sortedNames1, sortedNames2)) {
 				sortedNames1 = sortNames(names);
 			}
+			*/
+			sortedNames1 = BackgroundWorker_buborekDoWork();
+			stopwatch_bubble.Stop();
 			
 			
+			
+						
 			
 			//kiírás
 			this.label1.Text = "Buborékosan rendezett:" + Environment.NewLine;
+			this.label1.Text += "Futási idő: " + stopwatch_bubble.ElapsedMilliseconds + " ms" + Environment.NewLine;
 			for(int i = 0; i < sortedNames1.Length; i++) {
 				this.label1.Text +=	sortedNames1[i] + Environment.NewLine;
 			}
@@ -77,6 +98,7 @@ namespace hazi1
 			
 			//csharp rendezés kiírása
 			this.label4.Text = "C# array.sort rendezés:" + Environment.NewLine;
+			this.label4.Text += "Futási idő: " + stopwatch.ElapsedMilliseconds + " ms" + Environment.NewLine;
 			for(int i = 0; i < sortedNames2.Length; i++) {
 				this.label4.Text +=	sortedNames2[i] + Environment.NewLine;
 			}
@@ -158,6 +180,26 @@ namespace hazi1
 		void TextBox1TextChanged(object sender, EventArgs e)
 		{
 	
+		}
+		
+		void BackgroundWorker_buborekDoWork(object sender, DoWorkEventArgs e)
+		{
+			//futási idő mérése
+			Stopwatch stopwatch_bubble = Stopwatch.StartNew();
+			//rendezés
+			sortedNames1 = sortNames(names);			
+			while(!Enumerable.SequenceEqual(sortedNames1, sortedNames2)) {
+				sortedNames1 = sortNames(names);
+			}
+			stopwatch_bubble.Stop();
+			
+			return sortedNames1;
+		}
+		
+		void BackgroundWorker_rendezesDoWork(object sender, DoWorkEventArgs e)
+		{
+			Array.Sort(namesTemp);
+			return namesTemp;
 		}
 		
 		 
