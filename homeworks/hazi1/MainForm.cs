@@ -24,6 +24,13 @@ namespace hazi1
 	{
 		List<string> origNames = new List<string>(); //eredeti név lista
 		int linenumber = 0;
+		string[] namesToSort;
+		string[] names;
+		string[] namesCSorted;
+		Stopwatch stopwatch_bubble;
+		Stopwatch stopwatch_sorting;
+		string[] sortedNames1; //buborékosan rendezett tömb
+		
 		
 		public MainForm()
 		{
@@ -39,70 +46,48 @@ namespace hazi1
 		
 		void Button1Click(object sender, EventArgs e)
 		{
-			string[] sortedNames1; //rendezett nevek - string tömb
-			string[] sortedNames2; //rendezett tömb - csharp függvénnyel
-			string[] namesTemp; //ideiglenes tartalom
+			//string[] sortedNames1; //rendezett nevek - string tömb
+			//string[] sortedNames2; //rendezett tömb - csharp függvénnyel
+			//string[] namesTemp; //ideiglenes tartalom
 			int namelength = origNames.Count;
-			string[] names = new string[linenumber]; //feltöltött nevek - string tömb
+			names = new string[linenumber];
+			//string[] names = new string[linenumber]; //feltöltött nevek - string tömb
 			
 			//nevek feltöltése
-			for(int j = 0; j < origNames.Count; j++) {				
-				names[j] = origNames[j];
-			}
+			if(origNames.Count > 0) {
+				for(int j = 0; j < origNames.Count; j++) {				
+					names[j] = origNames[j];
+				}
 			
-			//kiírás
-			this.label2.Text = "Eredeti:" + Environment.NewLine;
-			for(int i = 0; i < names.Length; i++) {
-				this.label2.Text +=	names[i] + Environment.NewLine;
-			}
 			
-			//beépített rendezés
-			//egyeztetéshez
-			namesTemp = names;
+				//kiírás
+				this.label2.Text = "Eredeti:" + Environment.NewLine;
+				for(int i = 0; i < names.Length; i++) {
+					this.label2.Text +=	names[i] + Environment.NewLine;
+				}
 			
-			//futási idő mérése
-			Stopwatch stopwatch = Stopwatch.StartNew(); //creates and start the instance of Stopwatch
-			/*
-			//rendezés
-			Array.Sort(namesTemp);
-			*/
-			namesTemp = BackgroundWorker_rendezesDoWork();
-			//időmérés megállítása
-			stopwatch.Stop();
+			
+				
+				//beépített rendezés
+				//egyeztetéshez
+				namesToSort = names;
+				this.button1.Enabled = false;
+				this.button2.Enabled = false;
+				this.button3.Enabled = false;
+				
+				//első szálon futó csharp rendezés
+				backgroundWorker_rendezes.RunWorkerAsync();			
 		
-			sortedNames2 = namesTemp;
+				//második szálon futó buborék rendezés
+				Array.Sort(namesToSort);	
+				//összehasonlításhoz
+				namesCSorted = namesToSort;	
+				backgroundWorker_buborek.RunWorkerAsync();
+				
 			
-			//futási idő mérése
-			Stopwatch stopwatch_bubble = Stopwatch.StartNew();
-			//rendezés
-			/*
-			sortedNames1 = sortNames(names);			
-			while(!Enumerable.SequenceEqual(sortedNames1, sortedNames2)) {
-				sortedNames1 = sortNames(names);
+			} else {
+				label3.Text = "Nincsenek nevek!";
 			}
-			*/
-			sortedNames1 = BackgroundWorker_buborekDoWork();
-			stopwatch_bubble.Stop();
-			
-			
-			
-						
-			
-			//kiírás
-			this.label1.Text = "Buborékosan rendezett:" + Environment.NewLine;
-			this.label1.Text += "Futási idő: " + stopwatch_bubble.ElapsedMilliseconds + " ms" + Environment.NewLine;
-			for(int i = 0; i < sortedNames1.Length; i++) {
-				this.label1.Text +=	sortedNames1[i] + Environment.NewLine;
-			}
-			
-			
-			//csharp rendezés kiírása
-			this.label4.Text = "C# array.sort rendezés:" + Environment.NewLine;
-			this.label4.Text += "Futási idő: " + stopwatch.ElapsedMilliseconds + " ms" + Environment.NewLine;
-			for(int i = 0; i < sortedNames2.Length; i++) {
-				this.label4.Text +=	sortedNames2[i] + Environment.NewLine;
-			}
-			 
 		}
 		
 		public static string[] sortNames(string[] names) {
@@ -143,6 +128,8 @@ namespace hazi1
         			//System.Diagnostics.Debug.WriteLine(line);
         			linenumber++; //sorok száma
 				}
+        		label3.Text = "Nevek betöltve.";
+        		label3.ForeColor = Color.Black;
         		
             }
 		}
@@ -184,22 +171,105 @@ namespace hazi1
 		
 		void BackgroundWorker_buborekDoWork(object sender, DoWorkEventArgs e)
 		{
-			//futási idő mérése
-			Stopwatch stopwatch_bubble = Stopwatch.StartNew();
-			//rendezés
-			sortedNames1 = sortNames(names);			
-			while(!Enumerable.SequenceEqual(sortedNames1, sortedNames2)) {
-				sortedNames1 = sortNames(names);
-			}
-			stopwatch_bubble.Stop();
 			
-			return sortedNames1;
+			
+			BackgroundWorker helperBW = sender as BackgroundWorker;
+		   
+		    e.Result = bubbleSorting(helperBW);
+		    if (helperBW.CancellationPending)
+		    {
+		        e.Cancel = true;
+		    }
 		}
 		
 		void BackgroundWorker_rendezesDoWork(object sender, DoWorkEventArgs e)
 		{
-			Array.Sort(namesTemp);
-			return namesTemp;
+			BackgroundWorker helperBW = sender as BackgroundWorker;
+		   
+		    e.Result = csharpSorting(helperBW, namesToSort);
+		    if (helperBW.CancellationPending)
+		    {
+		        e.Cancel = true;
+		    }
+		}
+		
+		string[] csharpSorting(BackgroundWorker bw, string[] namesArray) {
+			
+			//futási idő mérése
+			stopwatch_sorting = Stopwatch.StartNew();
+			//rendezés
+			Array.Sort(namesArray);	
+			stopwatch_sorting.Stop();
+			
+			//összehasonlításhoz
+			namesCSorted = namesArray;		
+			return namesArray;
+		}
+		
+		string[] bubbleSorting(BackgroundWorker bw) {
+					    
+			//futási idő mérése
+			stopwatch_bubble = Stopwatch.StartNew();
+			//rendezés
+			sortedNames1 = sortNames(names);			
+			while(!Enumerable.SequenceEqual(sortedNames1, namesCSorted)) {
+				sortedNames1 = sortNames(names);
+			}
+			stopwatch_bubble.Stop();
+			return sortedNames1;
+		}
+		
+		private void BackgroundWorker_buborekRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+			/*
+		    if (e.Cancelled) MessageBox.Show("Operation was canceled");
+		    else if (e.Error != null) MessageBox.Show(e.Error.Message);
+		    else MessageBox.Show(e.Result.ToString());
+		    */
+		    
+		    if (e.Error != null) {
+				
+			} else {
+			    //buborékos kiírás
+				this.label1.Text = "Buborékosan rendezett (2. szál):" + Environment.NewLine;
+				this.label1.Text += "Futási idő: " + stopwatch_bubble.ElapsedMilliseconds + " ms" + Environment.NewLine;
+				for(int i = 0; i < sortedNames1.Length; i++) {
+					this.label1.Text +=	sortedNames1[i] + Environment.NewLine;
+				}
+				
+				if(!this.button1.Enabled) {
+					this.button1.Enabled = true;
+					this.button2.Enabled = true;
+					this.button3.Enabled = true;
+				}
+		    }
+		}  
+		
+		private void BackgroundWorker_rendezesRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+			/*
+		    if (e.Cancelled) MessageBox.Show("Operation was canceled");
+		    else if (e.Error != null) MessageBox.Show(e.Error.Message);
+		    else MessageBox.Show(e.Result.ToString());
+		    */
+		   
+		   System.Diagnostics.Debug.WriteLine("eee");
+		   if (e.Error != null) {
+		   	
+		   	} else {
+				//csharp rendezés kiírása
+				this.label4.Text = "C# array.sort rendezés (1. szál):" + Environment.NewLine;
+				this.label4.Text += "Futási idő: " + stopwatch_sorting.ElapsedMilliseconds + " ms" + Environment.NewLine;
+				for(int i = 0; i < namesCSorted.Length; i++) {
+					this.label4.Text +=	namesCSorted[i] + Environment.NewLine;
+				}
+				
+				if(!this.button1.Enabled) {
+					this.button1.Enabled = true;
+					this.button2.Enabled = true;
+					this.button3.Enabled = true;
+				}
+		   }
+		    
+		    
 		}
 		
 		 

@@ -76,14 +76,16 @@ namespace hazi1
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(12, 83);
+			this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.label1.Location = new System.Drawing.Point(140, 83);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(132, 169);
+			this.label1.Size = new System.Drawing.Size(173, 169);
 			this.label1.TabIndex = 1;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(150, 83);
+			this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.label2.Location = new System.Drawing.Point(12, 83);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(122, 169);
 			this.label2.TabIndex = 2;
@@ -136,18 +138,21 @@ namespace hazi1
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(318, 83);
+			this.label4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.label4.Location = new System.Drawing.Point(319, 83);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(133, 169);
+			this.label4.Size = new System.Drawing.Size(170, 169);
 			this.label4.TabIndex = 7;
 			// 
 			// backgroundWorker_buborek
 			// 
 			this.backgroundWorker_buborek.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BackgroundWorker_buborekDoWork);
+			this.backgroundWorker_buborek.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.BackgroundWorker_buborekRunWorkerCompleted);
 			// 
 			// backgroundWorker_rendezes
 			// 
 			this.backgroundWorker_rendezes.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BackgroundWorker_rendezesDoWork);
+			this.backgroundWorker_rendezes.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.BackgroundWorker_rendezesRunWorkerCompleted);
 			// 
 			// MainForm
 			// 
