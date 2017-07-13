@@ -1,0 +1,11 @@
+E:\__github\learning-csharp\mp3\mp3\bin\Release\mp3.exe.config
+E:\__github\learning-csharp\mp3\mp3\obj\Release\Interop.WMPLib.dll
+E:\__github\learning-csharp\mp3\mp3\obj\Release\AxInterop.WMPLib.dll
+E:\__github\learning-csharp\mp3\mp3\obj\Release\mp3.csproj.ResolveComReference.cache
+E:\__github\learning-csharp\mp3\mp3\bin\Release\mp3.exe
+E:\__github\learning-csharp\mp3\mp3\bin\Release\Interop.WMPLib.dll
+E:\__github\learning-csharp\mp3\mp3\bin\Release\AxInterop.WMPLib.dll
+E:\__github\learning-csharp\mp3\mp3\obj\Release\mp3.csprojResolveAssemblyReference.cache
+E:\__github\learning-csharp\mp3\mp3\obj\Release\mp3.MainForm.resources
+E:\__github\learning-csharp\mp3\mp3\obj\Release\mp3.csproj.GenerateResource.Cache
+E:\__github\learning-csharp\mp3\mp3\obj\Release\mp3.exe

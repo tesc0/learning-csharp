@@ -12,6 +12,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using WMPLib;
+using System.Windows.Media;
+using System.Windows;
 
 namespace mp3
 {
@@ -51,29 +53,27 @@ namespace mp3
         }
 		void Button1Click(object sender, EventArgs e)
 		{
-            wplayer.PlayStateChange +=
-                new WMPLib._WMPOCXEvents_PlayStateChangeEventHandler(Player_PlayStateChange);
-            wplayer.MediaError +=
-                new WMPLib._WMPOCXEvents_MediaErrorEventHandler(Player_MediaError);
 
-            //create a playlist
-            wplayer.currentPlaylist = wplayer.newPlaylist("playlist", "");            
-            foreach (ListViewItem itemRow in listView1.Items)
+            if (wplayer.currentPlaylist.count > 0)
             {
-                for (int i = 0; i < itemRow.SubItems.Count; i++)
-                {
-                    string song_path = itemRow.SubItems[i].Text;
-                    //Console.WriteLine(itemRow.SubItems[i].Text);
-                    wplayer.currentPlaylist.appendItem(wplayer.newMedia(song_path));
-                }
-            }
 
-            //load the file
-            //wplayer.URL = "e:\\Famous Last Words - Council Of The Dead (2014) 320\\02.Council of the Dead.mp3";
-            //base volume
-            wplayer.settings.volume = 50;
-            //let it rock
-            wplayer.controls.play();
+                wplayer.PlayStateChange +=
+                    new WMPLib._WMPOCXEvents_PlayStateChangeEventHandler(Player_PlayStateChange);
+                wplayer.MediaError +=
+                    new WMPLib._WMPOCXEvents_MediaErrorEventHandler(Player_MediaError);
+
+
+                //load the file
+                //wplayer.URL = "e:\\Famous Last Words - Council Of The Dead (2014) 320\\02.Council of the Dead.mp3";
+                //base volume
+                wplayer.settings.volume = 50;
+                //let it rock
+                wplayer.controls.play();
+
+            } else
+            {
+                MessageBox.Show("Nincs mit lejátszani!");
+            }
             
 		}
 
@@ -129,7 +129,7 @@ namespace mp3
                         //Console.WriteLine(itemRow.SubItems[i].Text);
                         if (song_path == wplayer.currentMedia.getItemInfo("SourceURL"))
                         {
-                            itemRow.SubItems[i].BackColor = Color.Red;
+                            itemRow.SubItems[i].BackColor = System.Drawing.Color.Red;
                         }
                     }
                 }
@@ -190,14 +190,14 @@ namespace mp3
             }
         }
 
-        private void listViewFiles_DragEnter(object sender, DragEventArgs e)
+        private void listViewFiles_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+            if (e.Data.GetDataPresent(System.Windows.Forms.DataFormats.FileDrop)) e.Effect = System.Windows.Forms.DragDropEffects.Copy;
         }
 
-        private void listViewFiles_DragDrop(object sender, DragEventArgs e)
+        private void listViewFiles_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
         {
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            string[] files = (string[])e.Data.GetData(System.Windows.Forms.DataFormats.FileDrop);
             foreach (string file in files)
             {
 
@@ -212,6 +212,8 @@ namespace mp3
                 }
             }
 
+            //create a playlist
+            playlist_set(0);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -224,6 +226,54 @@ namespace mp3
         {
             //previous
             wplayer.controls.previous();
+        }
+        
+        private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            /*
+            DependencyObject obj = (DependencyObject) e.OriginalSource;
+
+            while (obj != null && obj != listView1)
+            {
+                if (obj.GetType() == typeof(ListViewItem))
+                {
+                    // Do something here
+                    MessageBox.Show("A ListViewItem was double clicked!");
+
+                    break;
+                }
+                obj = VisualTreeHelper.GetParent(obj);
+            }*/
+
+            if (listView1.SelectedItems.Count == 1)
+            {
+                ListView.SelectedListViewItemCollection items = listView1.SelectedItems;
+
+                ListViewItem lvItem = items[0];
+                string what = lvItem.Text;
+
+                playlist_set(listView1.SelectedIndices[0]);
+                lejatszas.PerformClick();
+
+            }
+        }
+
+        private void playlist_set(int index)
+        {
+            
+            wplayer.currentPlaylist = wplayer.newPlaylist("playlist", "");
+            //foreach (ListViewItem itemRow in listView1.Items)
+            for(int k = index; k < listView1.Items.Count; k++)
+            {
+                ListViewItem itemRow = listView1.Items[k];
+                
+                for (int i = 0; i < itemRow.SubItems.Count; i++)
+                {
+                    string song_path = itemRow.SubItems[i].Text;
+                    Console.WriteLine("sorok: " + itemRow.SubItems[i].Text);
+                    wplayer.currentPlaylist.appendItem(wplayer.newMedia(song_path));
+                }
+            }
         }
     }
 }
